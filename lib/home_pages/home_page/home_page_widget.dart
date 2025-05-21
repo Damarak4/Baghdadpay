@@ -4,12 +4,15 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/home_pages/qrortid/qrortid_widget.dart';
+import '/custom_code/actions/index.dart' as actions;
 import '/index.dart';
+import 'dart:async';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
-import 'package:local_auth/local_auth.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'home_page_model.dart';
 export 'home_page_model.dart';
 
@@ -36,44 +39,26 @@ class _HomePageWidgetState extends State<HomePageWidget>
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      final _localAuth = LocalAuthentication();
-      bool _isBiometricSupported = await _localAuth.isDeviceSupported();
-
-      if (_isBiometricSupported) {
-        try {
-          _model.isauth = await _localAuth.authenticate(
-              localizedReason: 'يرجى التحقق من هويتك');
-        } on PlatformException {
-          _model.isauth = false;
-        }
-        safeSetState(() {});
-      }
-
-      if (_model.isauth == true) {
-        context.pushNamed(HomePageWidget.routeName);
-      } else {
-        await showDialog(
-          context: context,
-          builder: (alertDialogContext) {
-            return AlertDialog(
-              title: Text('خطا'),
-              content: Text('لم يتم التحقق قم بعادة المحاولة'),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(alertDialogContext),
-                  child: Text('Ok'),
-                ),
-              ],
-            );
-          },
-        );
-      }
-
       safeSetState(() {
         FFAppState().clearHomeQueryCache();
         _model.requestCompleted = false;
       });
       await _model.waitForRequestCompleted();
+      await Future.delayed(const Duration(milliseconds: 2000));
+      if (!(FFAppState().localnotification != '')) {
+        _model.notificationid = await actions.initOneSignal();
+        FFAppState().localnotification = _model.notificationid!;
+        safeSetState(() {});
+        await ProfileTable().update(
+          data: {
+            'notification_id': FFAppState().localnotification,
+          },
+          matchingRows: (rows) => rows.eqOrNull(
+            'email',
+            currentUserEmail,
+          ),
+        );
+      }
     });
 
     _model.tabBarController = TabController(
@@ -81,6 +66,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
       length: 3,
       initialIndex: 0,
     )..addListener(() => safeSetState(() {}));
+
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
@@ -93,6 +79,8 @@ class _HomePageWidgetState extends State<HomePageWidget>
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return FutureBuilder<List<ProfileRow>>(
       future: FFAppState()
           .homeQuery(
@@ -186,10 +174,31 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
                                                         .override(
-                                                          fontFamily:
-                                                              'Alexandria',
+                                                          font: GoogleFonts
+                                                              .alexandria(
+                                                            fontWeight:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontWeight,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
                                                           color: Colors.black,
                                                           letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontWeight,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
                                                         ),
                                               ),
                                               TextSpan(
@@ -205,32 +214,32 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
-                                                  fontFamily: 'Alexandria',
+                                                  font: GoogleFonts.alexandria(
+                                                    fontWeight:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontWeight,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontStyle,
+                                                  ),
                                                   color: Colors.black,
                                                   fontSize: 16.0,
                                                   letterSpacing: 0.0,
+                                                  fontWeight:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontWeight,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
                                                 ),
-                                          ),
-                                        ),
-                                        InkWell(
-                                          splashColor: Colors.transparent,
-                                          focusColor: Colors.transparent,
-                                          hoverColor: Colors.transparent,
-                                          highlightColor: Colors.transparent,
-                                          onTap: () async {
-                                            context.pushNamed(
-                                                NotificationPageWidget
-                                                    .routeName);
-                                          },
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(8.0),
-                                            child: Image.asset(
-                                              'assets/images/bell.png',
-                                              width: 32.0,
-                                              height: 32.0,
-                                              fit: BoxFit.cover,
-                                            ),
                                           ),
                                         ),
                                       ],
@@ -329,8 +338,16 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                                     .of(context)
                                                                 .bodyMedium
                                                                 .override(
-                                                                  fontFamily:
-                                                                      'Alexandria',
+                                                                  font: GoogleFonts
+                                                                      .alexandria(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    fontStyle: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .fontStyle,
+                                                                  ),
                                                                   fontSize:
                                                                       22.0,
                                                                   letterSpacing:
@@ -338,6 +355,10 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w600,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontStyle,
                                                                 ),
                                                           ),
                                                         ),
@@ -359,9 +380,16 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                                   AutoSizeText(
                                                             valueOrDefault<
                                                                 String>(
-                                                              homePageProfileRow
-                                                                  ?.balance
-                                                                  .toString(),
+                                                              formatNumber(
+                                                                homePageProfileRow
+                                                                    ?.balance,
+                                                                formatType:
+                                                                    FormatType
+                                                                        .decimal,
+                                                                decimalType:
+                                                                    DecimalType
+                                                                        .periodDecimal,
+                                                              ),
                                                               '0.000',
                                                             ),
                                                             textAlign:
@@ -370,8 +398,16 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                                     .of(context)
                                                                 .bodyMedium
                                                                 .override(
-                                                                  fontFamily:
-                                                                      'Alexandria',
+                                                                  font: GoogleFonts
+                                                                      .alexandria(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontStyle: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .fontStyle,
+                                                                  ),
                                                                   color: FlutterFlowTheme.of(
                                                                           context)
                                                                       .primaryText,
@@ -382,6 +418,10 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontStyle,
                                                                 ),
                                                           )),
                                                         ),
@@ -446,10 +486,27 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                                   .of(context)
                                                               .bodyMedium
                                                               .override(
-                                                                fontFamily:
-                                                                    'Alexandria',
+                                                                font: GoogleFonts
+                                                                    .alexandria(
+                                                                  fontWeight: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontWeight,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontStyle,
+                                                                ),
                                                                 letterSpacing:
                                                                     0.0,
+                                                                fontWeight: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontWeight,
+                                                                fontStyle: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
                                                               ),
                                                         ),
                                                       ),
@@ -527,14 +584,26 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                                   .of(context)
                                                               .bodyMedium
                                                               .override(
-                                                                fontFamily:
-                                                                    'Alexandria',
+                                                                font: GoogleFonts
+                                                                    .alexandria(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontStyle,
+                                                                ),
                                                                 fontSize: 22.0,
                                                                 letterSpacing:
                                                                     0.0,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
+                                                                fontStyle: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
                                                               ),
                                                         )),
                                                       ),
@@ -574,12 +643,34 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                       context)
                                                   .titleSmall
                                                   .override(
-                                                    fontFamily: 'Alexandria',
+                                                    font:
+                                                        GoogleFonts.alexandria(
+                                                      fontWeight:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .titleSmall
+                                                              .fontWeight,
+                                                      fontStyle:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .titleSmall
+                                                              .fontStyle,
+                                                    ),
                                                     color: FlutterFlowTheme.of(
                                                             context)
                                                         .primaryText,
                                                     fontSize: 18.0,
                                                     letterSpacing: 0.0,
+                                                    fontWeight:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .titleSmall
+                                                            .fontWeight,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .titleSmall
+                                                            .fontStyle,
                                                   ),
                                               elevation: 0.0,
                                               borderSide: BorderSide(
@@ -704,13 +795,26 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                             context)
                                                         .bodyMedium
                                                         .override(
-                                                          fontFamily:
-                                                              'Alexandria',
+                                                          font: GoogleFonts
+                                                              .alexandria(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
                                                           color: Colors.black,
                                                           fontSize: 16.0,
                                                           letterSpacing: 0.0,
                                                           fontWeight:
                                                               FontWeight.w500,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
                                                         ),
                                                   ),
                                                 ),
@@ -817,13 +921,26 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                             context)
                                                         .bodyMedium
                                                         .override(
-                                                          fontFamily:
-                                                              'Alexandria',
+                                                          font: GoogleFonts
+                                                              .alexandria(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
                                                           color: Colors.black,
                                                           fontSize: 16.0,
                                                           letterSpacing: 0.0,
                                                           fontWeight:
                                                               FontWeight.w500,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
                                                         ),
                                                   ),
                                                 ),
@@ -928,13 +1045,26 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                             context)
                                                         .bodyMedium
                                                         .override(
-                                                          fontFamily:
-                                                              'Alexandria',
+                                                          font: GoogleFonts
+                                                              .alexandria(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
                                                           color: Colors.black,
                                                           fontSize: 16.0,
                                                           letterSpacing: 0.0,
                                                           fontWeight:
                                                               FontWeight.w500,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
                                                         ),
                                                   ),
                                                 ),
@@ -1046,13 +1176,26 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                             context)
                                                         .bodyMedium
                                                         .override(
-                                                          fontFamily:
-                                                              'Alexandria',
+                                                          font: GoogleFonts
+                                                              .alexandria(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
                                                           color: Colors.black,
                                                           fontSize: 16.0,
                                                           letterSpacing: 0.0,
                                                           fontWeight:
                                                               FontWeight.w500,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
                                                         ),
                                                   ),
                                                 ),
@@ -1078,11 +1221,23 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
-                                                  fontFamily: 'Alexandria',
+                                                  font: GoogleFonts.alexandria(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontStyle,
+                                                  ),
                                                   color: Colors.black,
                                                   fontSize: 18.0,
                                                   letterSpacing: 0.0,
                                                   fontWeight: FontWeight.bold,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
                                                 ),
                                           ),
                                         ),
@@ -1176,12 +1331,29 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                                       .of(context)
                                                                   .bodyMedium
                                                                   .override(
-                                                                    fontFamily:
-                                                                        'Alexandria',
+                                                                    font: GoogleFonts
+                                                                        .alexandria(
+                                                                      fontWeight: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .bodyMedium
+                                                                          .fontWeight,
+                                                                      fontStyle: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .bodyMedium
+                                                                          .fontStyle,
+                                                                    ),
                                                                     color: Colors
                                                                         .black,
                                                                     letterSpacing:
                                                                         0.0,
+                                                                    fontWeight: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .fontWeight,
+                                                                    fontStyle: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .fontStyle,
                                                                   ),
                                                             ),
                                                           ),
@@ -1193,9 +1365,9 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                               Padding(
                                                                 padding: EdgeInsetsDirectional
                                                                     .fromSTEB(
-                                                                        0.0,
+                                                                        20.0,
                                                                         22.0,
-                                                                        40.0,
+                                                                        0.0,
                                                                         0.0),
                                                                 child: Text(
                                                                   valueOrDefault<
@@ -1209,29 +1381,42 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                                           context)
                                                                       .bodyMedium
                                                                       .override(
-                                                                        fontFamily:
-                                                                            'Alexandria',
+                                                                        font: GoogleFonts
+                                                                            .alexandria(
+                                                                          fontWeight: FlutterFlowTheme.of(context)
+                                                                              .bodyMedium
+                                                                              .fontWeight,
+                                                                          fontStyle: FlutterFlowTheme.of(context)
+                                                                              .bodyMedium
+                                                                              .fontStyle,
+                                                                        ),
                                                                         color: Colors
                                                                             .black,
                                                                         fontSize:
-                                                                            24.0,
+                                                                            26.0,
                                                                         letterSpacing:
                                                                             0.0,
+                                                                        fontWeight: FlutterFlowTheme.of(context)
+                                                                            .bodyMedium
+                                                                            .fontWeight,
+                                                                        fontStyle: FlutterFlowTheme.of(context)
+                                                                            .bodyMedium
+                                                                            .fontStyle,
                                                                       ),
                                                                 ),
                                                               ),
                                                               Padding(
                                                                 padding: EdgeInsetsDirectional
                                                                     .fromSTEB(
-                                                                        0.0,
+                                                                        140.0,
                                                                         22.0,
-                                                                        150.0,
+                                                                        0.0,
                                                                         0.0),
                                                                 child: Text(
                                                                   valueOrDefault<
                                                                       String>(
                                                                     dateTimeFormat(
-                                                                      "yMd",
+                                                                      "relative",
                                                                       listViewExpensesRow
                                                                           .dueDate,
                                                                       locale: FFLocalizations.of(
@@ -1244,14 +1429,27 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                                           context)
                                                                       .bodyMedium
                                                                       .override(
-                                                                        fontFamily:
-                                                                            'Alexandria',
-                                                                        color: Colors
-                                                                            .black,
+                                                                        font: GoogleFonts
+                                                                            .alexandria(
+                                                                          fontWeight: FlutterFlowTheme.of(context)
+                                                                              .bodyMedium
+                                                                              .fontWeight,
+                                                                          fontStyle: FlutterFlowTheme.of(context)
+                                                                              .bodyMedium
+                                                                              .fontStyle,
+                                                                        ),
+                                                                        color: FlutterFlowTheme.of(context)
+                                                                            .secondaryText,
                                                                         fontSize:
-                                                                            24.0,
+                                                                            20.0,
                                                                         letterSpacing:
                                                                             0.0,
+                                                                        fontWeight: FlutterFlowTheme.of(context)
+                                                                            .bodyMedium
+                                                                            .fontWeight,
+                                                                        fontStyle: FlutterFlowTheme.of(context)
+                                                                            .bodyMedium
+                                                                            .fontStyle,
                                                                       ),
                                                                 ),
                                                               ),
@@ -1298,10 +1496,27 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
-                                          fontFamily: 'Alexandria',
+                                          font: GoogleFonts.alexandria(
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
+                                          ),
                                           color: Colors.black,
                                           fontSize: 18.0,
                                           letterSpacing: 0.0,
+                                          fontWeight:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontWeight,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
                                           lineHeight: 1.5,
                                         ),
                                   ),
@@ -1310,20 +1525,36 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                   alignment: AlignmentDirectional(0.0, 0.0),
                                   child: Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 50.0, 0.0, 0.0),
+                                        0.0, 30.0, 0.0, 0.0),
                                     child: FFButtonWidget(
                                       onPressed: () async {
-                                        context.pushNamed(
-                                          SendToOther1Widget.routeName,
-                                          queryParameters: {
-                                            'tid': serializeParam(
-                                              homePageProfileRow?.tid,
-                                              ParamType.String,
-                                            ),
-                                          }.withoutNulls,
-                                        );
+                                        await showModalBottomSheet(
+                                          isScrollControlled: true,
+                                          backgroundColor: Colors.white,
+                                          enableDrag: false,
+                                          context: context,
+                                          builder: (context) {
+                                            return GestureDetector(
+                                              onTap: () {
+                                                FocusScope.of(context)
+                                                    .unfocus();
+                                                FocusManager
+                                                    .instance.primaryFocus
+                                                    ?.unfocus();
+                                              },
+                                              child: Padding(
+                                                padding:
+                                                    MediaQuery.viewInsetsOf(
+                                                        context),
+                                                child: QrortidWidget(
+                                                  tid: homePageProfileRow!.tid,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ).then((value) => safeSetState(() {}));
                                       },
-                                      text: 'ارسل',
+                                      text: 'ارسال',
                                       options: FFButtonOptions(
                                         width: 255.0,
                                         height: 50.0,
@@ -1337,18 +1568,92 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                         textStyle: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
-                                              fontFamily: 'Alexandria',
+                                              font: GoogleFonts.alexandria(
+                                                fontWeight: FontWeight.w800,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontStyle,
+                                              ),
                                               color:
                                                   FlutterFlowTheme.of(context)
                                                       .primaryText,
                                               fontSize: 20.0,
                                               letterSpacing: 0.0,
                                               fontWeight: FontWeight.w800,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .fontStyle,
                                             ),
                                         elevation: 0.0,
                                         borderSide: BorderSide(
                                           color: FlutterFlowTheme.of(context)
                                               .tertiary,
+                                          width: 2.0,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: AlignmentDirectional(0.0, 0.0),
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 30.0, 0.0, 0.0),
+                                    child: FFButtonWidget(
+                                      onPressed: () async {
+                                        context.pushNamed(
+                                          QrCodeTransectWidget.routeName,
+                                          queryParameters: {
+                                            'tid': serializeParam(
+                                              homePageProfileRow?.tid,
+                                              ParamType.String,
+                                            ),
+                                            'name': serializeParam(
+                                              homePageProfileRow?.name,
+                                              ParamType.String,
+                                            ),
+                                          }.withoutNulls,
+                                        );
+                                      },
+                                      text: 'QR Code',
+                                      options: FFButtonOptions(
+                                        width: 255.0,
+                                        height: 50.0,
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0.0, 0.0, 0.0, 0.0),
+                                        iconAlignment: IconAlignment.end,
+                                        iconPadding:
+                                            EdgeInsetsDirectional.fromSTEB(
+                                                0.0, 0.0, 0.0, 0.0),
+                                        color: Color(0xFF8B8DEC),
+                                        textStyle: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              font: GoogleFonts.interTight(
+                                                fontWeight: FontWeight.w800,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontStyle,
+                                              ),
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryText,
+                                              fontSize: 20.0,
+                                              letterSpacing: 0.0,
+                                              fontWeight: FontWeight.w800,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .fontStyle,
+                                            ),
+                                        elevation: 0.0,
+                                        borderSide: BorderSide(
+                                          color: Color(0xFF2526B0),
                                           width: 2.0,
                                         ),
                                         borderRadius:
@@ -1383,7 +1688,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                             .clearRedirectLocation();
 
                                         context.goNamedAuth(
-                                            StartWidget.routeName,
+                                            BioAuthWidget.routeName,
                                             context.mounted);
                                       },
                                       text: 'تسجيل الخروج',
@@ -1400,13 +1705,23 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                         textStyle: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
-                                              fontFamily: 'Alexandria',
+                                              font: GoogleFonts.alexandria(
+                                                fontWeight: FontWeight.w800,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontStyle,
+                                              ),
                                               color:
                                                   FlutterFlowTheme.of(context)
                                                       .primaryText,
                                               fontSize: 20.0,
                                               letterSpacing: 0.0,
                                               fontWeight: FontWeight.w800,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .fontStyle,
                                             ),
                                         elevation: 0.0,
                                         borderSide: BorderSide(
@@ -1432,15 +1747,41 @@ class _HomePageWidgetState extends State<HomePageWidget>
                         unselectedLabelColor: Color(0xFFA7D6E1),
                         labelStyle:
                             FlutterFlowTheme.of(context).titleMedium.override(
-                                  fontFamily: 'Inter Tight',
+                                  font: GoogleFonts.interTight(
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .titleMedium
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .titleMedium
+                                        .fontStyle,
+                                  ),
                                   fontSize: 14.0,
                                   letterSpacing: 0.0,
+                                  fontWeight: FlutterFlowTheme.of(context)
+                                      .titleMedium
+                                      .fontWeight,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .titleMedium
+                                      .fontStyle,
                                 ),
                         unselectedLabelStyle:
                             FlutterFlowTheme.of(context).titleMedium.override(
-                                  fontFamily: 'Inter Tight',
+                                  font: GoogleFonts.interTight(
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .titleMedium
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .titleMedium
+                                        .fontStyle,
+                                  ),
                                   fontSize: 14.0,
                                   letterSpacing: 0.0,
+                                  fontWeight: FlutterFlowTheme.of(context)
+                                      .titleMedium
+                                      .fontWeight,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .titleMedium
+                                      .fontStyle,
                                 ),
                         indicatorColor: Color(0xFF179AB2),
                         indicatorWeight: 5.0,

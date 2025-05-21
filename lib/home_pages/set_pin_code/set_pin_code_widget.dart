@@ -6,6 +6,7 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import '/index.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'set_pin_code_model.dart';
 export 'set_pin_code_model.dart';
 
@@ -90,12 +91,20 @@ class _SetPinCodeWidgetState extends State<SetPinCodeWidget> {
                             style: FlutterFlowTheme.of(context)
                                 .headlineMedium
                                 .override(
-                                  fontFamily: 'Outfit',
+                                  font: GoogleFonts.outfit(
+                                    fontWeight: FontWeight.bold,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .headlineMedium
+                                        .fontStyle,
+                                  ),
                                   color:
                                       FlutterFlowTheme.of(context).primaryText,
                                   fontSize: 24.0,
                                   letterSpacing: 0.0,
                                   fontWeight: FontWeight.bold,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .headlineMedium
+                                      .fontStyle,
                                 ),
                           ),
                         ),
@@ -108,11 +117,19 @@ class _SetPinCodeWidgetState extends State<SetPinCodeWidget> {
                   child: Text(
                     'يستعمل هذا الرقم للدفع عندما يكون المبلغ 1000 دينار او اكثر',
                     style: FlutterFlowTheme.of(context).labelMedium.override(
-                          fontFamily: 'Plus Jakarta Sans',
+                          font: GoogleFonts.plusJakartaSans(
+                            fontWeight: FontWeight.w500,
+                            fontStyle: FlutterFlowTheme.of(context)
+                                .labelMedium
+                                .fontStyle,
+                          ),
                           color: Color(0xFF8B8B8B),
                           fontSize: 15.0,
                           letterSpacing: 0.0,
                           fontWeight: FontWeight.w500,
+                          fontStyle: FlutterFlowTheme.of(context)
+                              .labelMedium
+                              .fontStyle,
                         ),
                   ),
                 ),
@@ -130,8 +147,21 @@ class _SetPinCodeWidgetState extends State<SetPinCodeWidget> {
                           length: 4,
                           textStyle:
                               FlutterFlowTheme.of(context).bodyLarge.override(
-                                    fontFamily: 'Alexandria',
+                                    font: GoogleFonts.alexandria(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .bodyLarge
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyLarge
+                                          .fontStyle,
+                                    ),
                                     letterSpacing: 0.0,
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .bodyLarge
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyLarge
+                                        .fontStyle,
                                   ),
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           enableActiveFill: false,
@@ -207,12 +237,22 @@ class _SetPinCodeWidgetState extends State<SetPinCodeWidget> {
                                     textStyle: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
-                                          fontFamily: 'Alexandria',
+                                          font: GoogleFonts.alexandria(
+                                            fontWeight: FontWeight.w800,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
+                                          ),
                                           color: FlutterFlowTheme.of(context)
                                               .primaryText,
                                           fontSize: 20.0,
                                           letterSpacing: 0.0,
                                           fontWeight: FontWeight.w800,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
                                         ),
                                     elevation: 0.0,
                                     borderSide: BorderSide(

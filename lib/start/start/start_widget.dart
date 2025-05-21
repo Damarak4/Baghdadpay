@@ -5,6 +5,7 @@ import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'start_model.dart';
 export 'start_model.dart';
 
@@ -142,10 +143,20 @@ class _StartWidgetState extends State<StartWidget>
                 child: Text(
                   'By Al-Khwarizmi College',
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
-                        fontFamily: 'Inter Tight',
-                        color: Color(0xFF404758),
+                        font: GoogleFonts.interTight(
+                          fontWeight: FlutterFlowTheme.of(context)
+                              .bodyMedium
+                              .fontWeight,
+                          fontStyle:
+                              FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                        ),
+                        color: Color(0xFF3B4247),
                         fontSize: 18.0,
                         letterSpacing: 0.0,
+                        fontWeight:
+                            FlutterFlowTheme.of(context).bodyMedium.fontWeight,
+                        fontStyle:
+                            FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                       ),
                 ).animateOnPageLoad(animationsMap['textOnPageLoadAnimation']!),
               ),

@@ -5,7 +5,9 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/index.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'manage_page_model.dart';
 export 'manage_page_model.dart';
 
@@ -42,17 +44,19 @@ class _ManagePageWidgetState extends State<ManagePageWidget> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<ProfileRow>>(
-      future: ProfileTable().querySingleRow(
-        queryFn: (q) => q.eqOrNull(
-          'email',
-          currentUserEmail,
-        ),
-      ),
+      future: (_model.requestCompleter ??= Completer<List<ProfileRow>>()
+            ..complete(ProfileTable().querySingleRow(
+              queryFn: (q) => q.eqOrNull(
+                'email',
+                currentUserEmail,
+              ),
+            )))
+          .future,
       builder: (context, snapshot) {
         // Customize what your widget looks like when it's loading.
         if (!snapshot.hasData) {
           return Scaffold(
-            backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+            backgroundColor: Colors.white,
             body: Center(
               child: SizedBox(
                 width: 60.0,
@@ -79,7 +83,7 @@ class _ManagePageWidgetState extends State<ManagePageWidget> {
           },
           child: Scaffold(
             key: scaffoldKey,
-            backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+            backgroundColor: Colors.white,
             body: Padding(
               padding: EdgeInsetsDirectional.fromSTEB(0.0, 1.0, 0.0, 0.0),
               child: Container(
@@ -93,30 +97,21 @@ class _ManagePageWidgetState extends State<ManagePageWidget> {
                   children: [
                     Align(
                       alignment: AlignmentDirectional(1.0, -1.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Align(
-                            alignment: AlignmentDirectional(1.0, -1.0),
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  20.0, 40.0, 0.0, 0.0),
-                              child: FlutterFlowIconButton(
-                                borderRadius: 8.0,
-                                buttonSize: 40.0,
-                                icon: Icon(
-                                  Icons.arrow_forward,
-                                  color: Colors.black,
-                                  size: 24.0,
-                                ),
-                                onPressed: () async {
-                                  context.safePop();
-                                },
-                              ),
-                            ),
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            20.0, 40.0, 0.0, 0.0),
+                        child: FlutterFlowIconButton(
+                          borderRadius: 8.0,
+                          buttonSize: 40.0,
+                          icon: Icon(
+                            Icons.arrow_forward,
+                            color: Colors.black,
+                            size: 24.0,
                           ),
-                        ],
+                          onPressed: () async {
+                            context.safePop();
+                          },
+                        ),
                       ),
                     ),
                     Align(
@@ -128,11 +123,19 @@ class _ManagePageWidgetState extends State<ManagePageWidget> {
                           'معلومات المستخدم',
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
-                                    fontFamily: 'Alexandria',
+                                    font: GoogleFonts.alexandria(
+                                      fontWeight: FontWeight.bold,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
                                     color: Color(0xFF12597E),
                                     fontSize: 18.0,
                                     letterSpacing: 0.0,
                                     fontWeight: FontWeight.bold,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontStyle,
                                   ),
                         ),
                       ),
@@ -153,11 +156,20 @@ class _ManagePageWidgetState extends State<ManagePageWidget> {
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
-                                        fontFamily: 'Alexandria',
+                                        font: GoogleFonts.alexandria(
+                                          fontWeight: FontWeight.w500,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
+                                        ),
                                         color: Colors.black,
                                         fontSize: 16.0,
                                         letterSpacing: 0.0,
                                         fontWeight: FontWeight.w500,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontStyle,
                                       ),
                                 ),
                                 TextSpan(
@@ -175,8 +187,21 @@ class _ManagePageWidgetState extends State<ManagePageWidget> {
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
-                                    fontFamily: 'Alexandria',
+                                    font: GoogleFonts.alexandria(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
                                     letterSpacing: 0.0,
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontStyle,
                                   ),
                             ),
                           ),
@@ -197,11 +222,20 @@ class _ManagePageWidgetState extends State<ManagePageWidget> {
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
-                                        fontFamily: 'Alexandria',
+                                        font: GoogleFonts.alexandria(
+                                          fontWeight: FontWeight.w500,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
+                                        ),
                                         color: Colors.black,
                                         fontSize: 16.0,
                                         letterSpacing: 0.0,
                                         fontWeight: FontWeight.w500,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontStyle,
                                       ),
                                 ),
                                 TextSpan(
@@ -219,8 +253,21 @@ class _ManagePageWidgetState extends State<ManagePageWidget> {
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
-                                    fontFamily: 'Alexandria',
+                                    font: GoogleFonts.alexandria(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
                                     letterSpacing: 0.0,
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontStyle,
                                   ),
                             ),
                           ),
@@ -241,11 +288,20 @@ class _ManagePageWidgetState extends State<ManagePageWidget> {
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
-                                        fontFamily: 'Alexandria',
+                                        font: GoogleFonts.alexandria(
+                                          fontWeight: FontWeight.w500,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
+                                        ),
                                         color: Colors.black,
                                         fontSize: 16.0,
                                         letterSpacing: 0.0,
                                         fontWeight: FontWeight.w500,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontStyle,
                                       ),
                                 ),
                                 TextSpan(
@@ -261,18 +317,40 @@ class _ManagePageWidgetState extends State<ManagePageWidget> {
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
-                                        fontFamily: 'Alexandria',
+                                        font: GoogleFonts.alexandria(
+                                          fontWeight: FontWeight.bold,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
+                                        ),
                                         color: Color(0xFF12597E),
                                         letterSpacing: 0.0,
                                         fontWeight: FontWeight.bold,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontStyle,
                                       ),
                                 )
                               ],
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
-                                    fontFamily: 'Alexandria',
+                                    font: GoogleFonts.alexandria(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
                                     letterSpacing: 0.0,
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontStyle,
                                   ),
                             ),
                           ),
@@ -293,25 +371,52 @@ class _ManagePageWidgetState extends State<ManagePageWidget> {
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
-                                        fontFamily: 'Alexandria',
+                                        font: GoogleFonts.alexandria(
+                                          fontWeight: FontWeight.w500,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
+                                        ),
                                         color: Colors.black,
                                         fontSize: 16.0,
                                         letterSpacing: 0.0,
                                         fontWeight: FontWeight.w500,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontStyle,
                                       ),
                                 ),
                                 TextSpan(
-                                  text: '',
+                                  text: valueOrDefault<String>(
+                                    managePageProfileRow?.status,
+                                    'status',
+                                  ),
                                   style: TextStyle(
-                                    color: Colors.black,
+                                    color: Color(0xFF12597E),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14.0,
                                   ),
                                 )
                               ],
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
-                                    fontFamily: 'Alexandria',
+                                    font: GoogleFonts.alexandria(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
                                     letterSpacing: 0.0,
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontStyle,
                                   ),
                             ),
                           ),
@@ -331,11 +436,19 @@ class _ManagePageWidgetState extends State<ManagePageWidget> {
                           'اعدادات البطاقة',
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
-                                    fontFamily: 'Alexandria',
+                                    font: GoogleFonts.alexandria(
+                                      fontWeight: FontWeight.bold,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
                                     color: Color(0xFF12597E),
                                     fontSize: 18.0,
                                     letterSpacing: 0.0,
                                     fontWeight: FontWeight.bold,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontStyle,
                                   ),
                         ),
                       ),
@@ -358,10 +471,23 @@ class _ManagePageWidgetState extends State<ManagePageWidget> {
                           color: Color(0xFFA2A3E7),
                           textStyle:
                               FlutterFlowTheme.of(context).titleSmall.override(
-                                    fontFamily: 'Alexandria',
+                                    font: GoogleFonts.alexandria(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .fontStyle,
+                                    ),
                                     color: Colors.black,
                                     fontSize: 18.0,
                                     letterSpacing: 0.0,
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .titleSmall
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .titleSmall
+                                        .fontStyle,
                                   ),
                           elevation: 0.0,
                           borderSide: BorderSide(
@@ -376,8 +502,18 @@ class _ManagePageWidgetState extends State<ManagePageWidget> {
                       padding:
                           EdgeInsetsDirectional.fromSTEB(0.0, 28.0, 0.0, 0.0),
                       child: FFButtonWidget(
-                        onPressed: () {
-                          print('Button pressed ...');
+                        onPressed: () async {
+                          await ProfileTable().update(
+                            data: {
+                              'status': 'غير فاعلة',
+                            },
+                            matchingRows: (rows) => rows.eqOrNull(
+                              'email',
+                              currentUserEmail,
+                            ),
+                          );
+                          safeSetState(() => _model.requestCompleter = null);
+                          await _model.waitForRequestCompleted();
                         },
                         text: 'ايقاف البطاقة',
                         options: FFButtonOptions(
@@ -390,10 +526,23 @@ class _ManagePageWidgetState extends State<ManagePageWidget> {
                           color: FlutterFlowTheme.of(context).error,
                           textStyle:
                               FlutterFlowTheme.of(context).titleSmall.override(
-                                    fontFamily: 'Alexandria',
+                                    font: GoogleFonts.alexandria(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .fontStyle,
+                                    ),
                                     color: Colors.black,
                                     fontSize: 18.0,
                                     letterSpacing: 0.0,
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .titleSmall
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .titleSmall
+                                        .fontStyle,
                                   ),
                           elevation: 0.0,
                           borderSide: BorderSide(

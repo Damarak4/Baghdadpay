@@ -1,5 +1,6 @@
 // Automatic FlutterFlow imports
 import '/backend/supabase/supabase.dart';
+import '/actions/actions.dart' as action_blocks;
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'index.dart'; // Imports other custom actions
@@ -13,14 +14,12 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:path_provider/path_provider.dart';
 
-/// Sends an ultrasonic signal that encodes the given transaction ID (tid)
-/// using frequency shift keying: 18 kHz = bit 0, 20 kHz = bit 1.
 Future<bool> sendUltrasoundSignal(String tid) async {
   try {
     String binary = _textToBinary(tid);
 
     for (int i = 0; i < binary.length; i++) {
-      int freq = binary[i] == '0' ? 18000 : 20000;
+      int freq = binary[i] == '0' ? 10100 : 11200;
       Uint8List wave = generateSineWave(freq, 0.15);
       await playAudioSignal(wave);
       await Future.delayed(Duration(milliseconds: 50)); // short gap

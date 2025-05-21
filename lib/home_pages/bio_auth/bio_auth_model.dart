@@ -1,12 +1,12 @@
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
-import 'send_to_other4_widget.dart' show SendToOther4Widget;
+import 'bio_auth_widget.dart' show BioAuthWidget;
 import 'package:flutter/material.dart';
 
-class SendToOther4Model extends FlutterFlowModel<SendToOther4Widget> {
+class BioAuthModel extends FlutterFlowModel<BioAuthWidget> {
   ///  State fields for stateful widgets in this page.
 
-  bool auth = false;
+  bool auhtorNot = false;
 
   @override
   void initState(BuildContext context) {}

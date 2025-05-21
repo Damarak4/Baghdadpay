@@ -50,4 +50,11 @@ class ProfileRow extends SupabaseDataRow {
 
   double get balance => getField<double>('balance')!;
   set balance(double value) => setField<double>('balance', value);
+
+  String? get notificationId => getField<String>('notification_id');
+  set notificationId(String? value) =>
+      setField<String>('notification_id', value);
+
+  String? get status => getField<String>('status');
+  set status(String? value) => setField<String>('status', value);
 }

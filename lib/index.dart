@@ -26,8 +26,6 @@ export '/home_pages/set_pin_code/set_pin_code_widget.dart'
     show SetPinCodeWidget;
 export '/tool_bar/reset_pin_code_v/reset_pin_code_v_widget.dart'
     show ResetPinCodeVWidget;
-export '/home_pages/notification_page/notification_page_widget.dart'
-    show NotificationPageWidget;
 export '/tool_bar/resrt_pin_code/resrt_pin_code_widget.dart'
     show ResrtPinCodeWidget;
 export '/tool_bar/successornot/successornot_widget.dart'
@@ -40,3 +38,6 @@ export '/send_money/send_to_other_3/send_to_other3_widget.dart'
     show SendToOther3Widget;
 export '/send_money/send_to_other_4/send_to_other4_widget.dart'
     show SendToOther4Widget;
+export '/home_pages/bio_auth/bio_auth_widget.dart' show BioAuthWidget;
+export '/send_money/qr_code_transect/qr_code_transect_widget.dart'
+    show QrCodeTransectWidget;

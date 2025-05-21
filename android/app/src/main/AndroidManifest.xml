@@ -2,6 +2,7 @@
     package="com.UOB.baghdadcard"
     xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
 
     <application
@@ -55,6 +56,7 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
 
 
 

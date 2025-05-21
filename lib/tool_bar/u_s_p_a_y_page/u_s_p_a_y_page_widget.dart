@@ -5,6 +5,7 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import '/custom_code/actions/index.dart' as actions;
 import '/index.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'u_s_p_a_y_page_model.dart';
 export 'u_s_p_a_y_page_model.dart';
 
@@ -95,11 +96,19 @@ class _USPAYPageWidgetState extends State<USPAYPageWidget> {
                 child: Text(
                   'الدفع بواسطة الهاتف',
                   style: FlutterFlowTheme.of(context).headlineMedium.override(
-                        fontFamily: 'Outfit',
+                        font: GoogleFonts.outfit(
+                          fontWeight: FontWeight.bold,
+                          fontStyle: FlutterFlowTheme.of(context)
+                              .headlineMedium
+                              .fontStyle,
+                        ),
                         color: FlutterFlowTheme.of(context).tertiary,
                         fontSize: 35.0,
                         letterSpacing: 0.0,
                         fontWeight: FontWeight.bold,
+                        fontStyle: FlutterFlowTheme.of(context)
+                            .headlineMedium
+                            .fontStyle,
                       ),
                 ),
               ),
@@ -108,11 +117,18 @@ class _USPAYPageWidgetState extends State<USPAYPageWidget> {
                 child: Text(
                   'قم بتقريب الهاتف من جهاز الدفع ',
                   style: FlutterFlowTheme.of(context).labelMedium.override(
-                        fontFamily: 'Plus Jakarta Sans',
+                        font: GoogleFonts.plusJakartaSans(
+                          fontWeight: FontWeight.w500,
+                          fontStyle: FlutterFlowTheme.of(context)
+                              .labelMedium
+                              .fontStyle,
+                        ),
                         color: Color(0xFF454545),
                         fontSize: 19.0,
                         letterSpacing: 0.0,
                         fontWeight: FontWeight.w500,
+                        fontStyle:
+                            FlutterFlowTheme.of(context).labelMedium.fontStyle,
                       ),
                 ),
               ),
@@ -157,11 +173,19 @@ class _USPAYPageWidgetState extends State<USPAYPageWidget> {
                       color: Color(0xFF3FD9FD),
                       textStyle:
                           FlutterFlowTheme.of(context).bodyMedium.override(
-                                fontFamily: 'Alexandria',
+                                font: GoogleFonts.alexandria(
+                                  fontWeight: FontWeight.w800,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .fontStyle,
+                                ),
                                 color: FlutterFlowTheme.of(context).primaryText,
                                 fontSize: 20.0,
                                 letterSpacing: 0.0,
                                 fontWeight: FontWeight.w800,
+                                fontStyle: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .fontStyle,
                               ),
                       elevation: 0.0,
                       borderSide: BorderSide(

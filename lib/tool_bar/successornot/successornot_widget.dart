@@ -4,6 +4,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/index.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'successornot_model.dart';
 export 'successornot_model.dart';
 
@@ -112,11 +113,19 @@ class _SuccessornotWidgetState extends State<SuccessornotWidget> {
                   child: Text(
                     'فشل الارسال',
                     style: FlutterFlowTheme.of(context).headlineMedium.override(
-                          fontFamily: 'Outfit',
+                          font: GoogleFonts.outfit(
+                            fontWeight: FontWeight.bold,
+                            fontStyle: FlutterFlowTheme.of(context)
+                                .headlineMedium
+                                .fontStyle,
+                          ),
                           color: FlutterFlowTheme.of(context).error,
                           fontSize: 43.0,
                           letterSpacing: 0.0,
                           fontWeight: FontWeight.bold,
+                          fontStyle: FlutterFlowTheme.of(context)
+                              .headlineMedium
+                              .fontStyle,
                         ),
                   ),
                 ),
@@ -126,11 +135,19 @@ class _SuccessornotWidgetState extends State<SuccessornotWidget> {
                   child: Text(
                     'تمت العملية بنجاح',
                     style: FlutterFlowTheme.of(context).headlineMedium.override(
-                          fontFamily: 'Outfit',
+                          font: GoogleFonts.outfit(
+                            fontWeight: FontWeight.bold,
+                            fontStyle: FlutterFlowTheme.of(context)
+                                .headlineMedium
+                                .fontStyle,
+                          ),
                           color: Color(0xFF0E9686),
                           fontSize: 43.0,
                           letterSpacing: 0.0,
                           fontWeight: FontWeight.bold,
+                          fontStyle: FlutterFlowTheme.of(context)
+                              .headlineMedium
+                              .fontStyle,
                         ),
                   ),
                 ),
@@ -154,11 +171,19 @@ class _SuccessornotWidgetState extends State<SuccessornotWidget> {
                       color: Color(0xFF3FD9FD),
                       textStyle:
                           FlutterFlowTheme.of(context).bodyMedium.override(
-                                fontFamily: 'Alexandria',
+                                font: GoogleFonts.alexandria(
+                                  fontWeight: FontWeight.w800,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .fontStyle,
+                                ),
                                 color: FlutterFlowTheme.of(context).primaryText,
                                 fontSize: 22.0,
                                 letterSpacing: 0.0,
                                 fontWeight: FontWeight.w800,
+                                fontStyle: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .fontStyle,
                               ),
                       elevation: 0.0,
                       borderSide: BorderSide(

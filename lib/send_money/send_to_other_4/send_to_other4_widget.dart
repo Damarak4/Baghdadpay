@@ -5,6 +5,9 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/index.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:local_auth/local_auth.dart';
 import 'send_to_other4_model.dart';
 export 'send_to_other4_model.dart';
 
@@ -100,16 +103,24 @@ class _SendToOther4WidgetState extends State<SendToOther4Widget> {
                           padding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 16.0, 0.0, 0.0),
                           child: Text(
-                            'تححقق من المعلومات',
+                            'تحقق من المعلومات',
                             style: FlutterFlowTheme.of(context)
                                 .headlineMedium
                                 .override(
-                                  fontFamily: 'Outfit',
+                                  font: GoogleFonts.outfit(
+                                    fontWeight: FontWeight.bold,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .headlineMedium
+                                        .fontStyle,
+                                  ),
                                   color:
                                       FlutterFlowTheme.of(context).primaryText,
                                   fontSize: 24.0,
                                   letterSpacing: 0.0,
                                   fontWeight: FontWeight.bold,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .headlineMedium
+                                      .fontStyle,
                                 ),
                           ),
                         ),
@@ -122,13 +133,26 @@ class _SendToOther4WidgetState extends State<SendToOther4Widget> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'سيتم ارسال ',
+                              'سيتم ارسال مبلغ: ',
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
-                                    fontFamily: 'Alexandria',
-                                    fontSize: 26.0,
+                                    font: GoogleFonts.alexandria(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
+                                    fontSize: 22.0,
                                     letterSpacing: 0.0,
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontStyle,
                                   ),
                             ),
                             Text(
@@ -139,10 +163,23 @@ class _SendToOther4WidgetState extends State<SendToOther4Widget> {
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
-                                    fontFamily: 'Alexandria',
-                                    color: Color(0xFF3883FF),
-                                    fontSize: 26.0,
+                                    font: GoogleFonts.alexandria(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
+                                    color: Color(0xFF979A9C),
+                                    fontSize: 24.0,
                                     letterSpacing: 0.0,
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontStyle,
                                   ),
                             ),
                           ],
@@ -156,13 +193,26 @@ class _SendToOther4WidgetState extends State<SendToOther4Widget> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'الى ',
+                              'اسم المستلم: ',
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
-                                    fontFamily: 'Alexandria',
-                                    fontSize: 26.0,
+                                    font: GoogleFonts.alexandria(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
+                                    fontSize: 22.0,
                                     letterSpacing: 0.0,
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontStyle,
                                   ),
                             ),
                             Text(
@@ -173,10 +223,23 @@ class _SendToOther4WidgetState extends State<SendToOther4Widget> {
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
-                                    fontFamily: 'Alexandria',
-                                    color: Color(0xFF3883FF),
-                                    fontSize: 26.0,
+                                    font: GoogleFonts.alexandria(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
+                                    color: Color(0xFF979A9C),
+                                    fontSize: 20.0,
                                     letterSpacing: 0.0,
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontStyle,
                                   ),
                             ),
                           ],
@@ -207,6 +270,25 @@ class _SendToOther4WidgetState extends State<SendToOther4Widget> {
                                     if (widget.amount! >= 250) {
                                       if (widget.balancesender! >=
                                           widget.amount!.toDouble()) {
+                                        while (_model.auth == false) {
+                                          final _localAuth =
+                                              LocalAuthentication();
+                                          bool _isBiometricSupported =
+                                              await _localAuth
+                                                  .isDeviceSupported();
+
+                                          if (_isBiometricSupported) {
+                                            try {
+                                              _model.auth =
+                                                  await _localAuth.authenticate(
+                                                      localizedReason:
+                                                          'يرجى التاكيد');
+                                            } on PlatformException {
+                                              _model.auth = false;
+                                            }
+                                            safeSetState(() {});
+                                          }
+                                        }
                                         // Add Money to recevier
                                         await ProfileTable().update(
                                           data: {
@@ -280,6 +362,9 @@ class _SendToOther4WidgetState extends State<SendToOther4Widget> {
                                             );
                                           },
                                         );
+
+                                        context.pushNamed(
+                                            HomePageWidget.routeName);
                                       }
                                     } else {
                                       await showDialog(
@@ -302,6 +387,8 @@ class _SendToOther4WidgetState extends State<SendToOther4Widget> {
                                     }
 
                                     context.pushNamed(HomePageWidget.routeName);
+
+                                    safeSetState(() {});
                                   },
                                   text: 'تأكيد',
                                   options: FFButtonOptions(
@@ -316,12 +403,22 @@ class _SendToOther4WidgetState extends State<SendToOther4Widget> {
                                     textStyle: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
-                                          fontFamily: 'Alexandria',
+                                          font: GoogleFonts.alexandria(
+                                            fontWeight: FontWeight.w800,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
+                                          ),
                                           color: FlutterFlowTheme.of(context)
                                               .primaryText,
                                           fontSize: 20.0,
                                           letterSpacing: 0.0,
                                           fontWeight: FontWeight.w800,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
                                         ),
                                     elevation: 0.0,
                                     borderSide: BorderSide(

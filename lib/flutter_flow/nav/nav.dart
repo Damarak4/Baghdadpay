@@ -77,13 +77,13 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       refreshListenable: appStateNotifier,
       navigatorKey: appNavigatorKey,
       errorBuilder: (context, state) =>
-          appStateNotifier.loggedIn ? HomePageWidget() : StartWidget(),
+          appStateNotifier.loggedIn ? HomePageWidget() : BioAuthWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) =>
-              appStateNotifier.loggedIn ? HomePageWidget() : StartWidget(),
+              appStateNotifier.loggedIn ? HomePageWidget() : BioAuthWidget(),
         ),
         FFRoute(
           name: HomePageWidget.routeName,
@@ -177,11 +177,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => ResetPinCodeVWidget(),
         ),
         FFRoute(
-          name: NotificationPageWidget.routeName,
-          path: NotificationPageWidget.routePath,
-          builder: (context, params) => NotificationPageWidget(),
-        ),
-        FFRoute(
           name: ResrtPinCodeWidget.routeName,
           path: ResrtPinCodeWidget.routePath,
           builder: (context, params) => ResrtPinCodeWidget(),
@@ -268,6 +263,25 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             ),
             recevername: params.getParam(
               'recevername',
+              ParamType.String,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: BioAuthWidget.routeName,
+          path: BioAuthWidget.routePath,
+          builder: (context, params) => BioAuthWidget(),
+        ),
+        FFRoute(
+          name: QrCodeTransectWidget.routeName,
+          path: QrCodeTransectWidget.routePath,
+          builder: (context, params) => QrCodeTransectWidget(
+            tid: params.getParam(
+              'tid',
+              ParamType.String,
+            ),
+            name: params.getParam(
+              'name',
               ParamType.String,
             ),
           ),
@@ -439,7 +453,7 @@ class FFRoute {
 
           if (requireAuth && !appStateNotifier.loggedIn) {
             appStateNotifier.setRedirectLocationIfUnset(state.uri.toString());
-            return '/start';
+            return '/bioAuth';
           }
           return null;
         },
